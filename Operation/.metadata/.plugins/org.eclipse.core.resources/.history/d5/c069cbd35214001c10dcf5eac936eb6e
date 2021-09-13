@@ -1,0 +1,16 @@
+package com.example.demo.DAO;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.demo.Entity.MemberAccountJPA;
+
+
+public interface MemberRepository extends JpaRepository<MemberAccountJPA, Long> {
+	
+	List<MemberAccountJPA> findAll();
+
+	List<MemberAccountJPA> findByEmail(String email);
+
+}

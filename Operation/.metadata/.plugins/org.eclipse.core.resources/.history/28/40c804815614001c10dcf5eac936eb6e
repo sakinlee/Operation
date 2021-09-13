@@ -1,0 +1,27 @@
+package com.example.demo.DAO;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.Entity.CurrencyJPA;
+
+public interface CurrencyRepository extends JpaRepository<CurrencyJPA, Long> {
+	
+	List<CurrencyJPA> findAll();
+
+	List<CurrencyJPA> findByChartName(String chartName);
+	
+	@Query(value = "SELECT c FROM currency c")
+	List<CurrencyJPA> findCurrency(CurrencyJPA currencyJPA);
+
+	
+	@Transactional
+    @Modifying
+    @Query(value = "INSERT INTO currency(CHARTNAME , SYMBOL , CODE , RATE , DESCRIPTION , RATEFLOAT ) VALUES ( :#{#CJPA.chartName}, :#{#CJPA.symbol}, :#{#CJPA.code}, :#{#CJPA.rate}, :#{#CJPA.description}, :#{#CJPA.rateFloat})", nativeQuery = true)
+    int insertCurrencyTable(@Param("CJPA") CurrencyJPA student);
+}

@@ -1,0 +1,34 @@
+package com.example.demo;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.example.demo.controller.ServiceController;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+//(classes = OperationApplication.class)
+public class OperationApplicationTests {
+	
+	@Autowired
+	private ServiceController serviceController;
+	
+	@Test
+	public void contextLoads()  throws Exception{
+		System.out.println("測試開始");
+		System.out.println("取得資訊="+serviceController.currentprice());
+		
+
+		System.out.println("功課2.="+serviceController.insertCurrencyTable());
+		System.out.println("功課1.="+serviceController.selectCurrencyTable());
+		System.out.println("功課3.="+serviceController.updateCurrencyTable());
+		System.out.println("功課3.[再確認]="+serviceController.selectCurrencyTable());
+		System.out.println("功課4.="+serviceController.selectCurrencyTable());
+		System.out.println("功課4.[再確認]="+serviceController.selectCurrencyTable());
+		
+	}
+
+}

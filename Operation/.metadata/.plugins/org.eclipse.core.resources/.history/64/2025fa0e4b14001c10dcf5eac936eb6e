@@ -1,0 +1,35 @@
+package com.example.demo.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.example.demo.DAO.MemberRepository;
+import com.example.demo.Entity.MemberAccountJPA;
+
+@Controller
+@RequestMapping("/Service")
+public class ServiceController {
+
+	@Autowired
+	MemberRepository memberRepository;
+
+	@Autowired
+	DataSource dataSource;
+
+	@("/addMemberPage")
+	public String addMemberPage() {
+
+		List<MemberAccountJPA> memberAccountJPA = new ArrayList<MemberAccountJPA>();
+		memberAccountJPA = memberRepository.findAll();
+
+		for (int i = 0; i < memberAccountJPA.size(); i++) {
+			System.out.println(memberAccountJPA.get(i).getId());
+		}
+		return "addMemberPage";
+	}
+}

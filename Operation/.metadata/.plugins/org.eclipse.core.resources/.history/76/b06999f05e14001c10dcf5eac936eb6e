@@ -1,0 +1,21 @@
+package com.example.demo;
+
+import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+//(classes = OperationApplication.class)
+class OperationApplicationTests {
+	
+//	@Autowired
+//	private ServiceController serviceController;
+	
+	@Test
+	void contextLoads()  throws Exception{
+		System.out.println("測試開始");
+		//serviceController.currentprice();
+		
+	}
+
+}

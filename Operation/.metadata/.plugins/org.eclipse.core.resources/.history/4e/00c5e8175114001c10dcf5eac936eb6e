@@ -1,0 +1,31 @@
+package com.example.demo.Entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "currency")
+public class CurrencyJPA {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
+	@Column(name = "CHARTNAME")
+	private String chartName;
+	
+	@Column(name = "CODE")
+	private String code;
+	
+	@Column(name = "rate")
+	private String rate;
+	
+	@Column(name = "description")
+	private String description;
+
+
+
+}

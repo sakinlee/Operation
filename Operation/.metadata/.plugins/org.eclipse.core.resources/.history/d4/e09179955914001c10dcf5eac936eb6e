@@ -1,0 +1,98 @@
+package com.example.demo.Utils;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class DataUtils {
+
+
+	/**
+	 * 物件轉JSON功能
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public static String Object2Json(Object obj) {
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		String jsonInString = "";
+		logger.info("=====物件的內容:" + obj.toString() + ";=====");
+		try {
+			jsonInString = mapper.writeValueAsString(obj);
+
+		} catch (JsonMappingException e) {
+			logger.error(e.getMessage());
+		} catch (JsonGenerationException e) {
+			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+
+		return jsonInString;
+
+	}
+
+	/**
+	 * JSON轉物件功能
+	 * 
+	 * @param json
+	 * @param responceClass
+	 * @return
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
+	public static <T> T json2Object(String json, Class<T> responceClass)
+			throws JsonParseException, JsonMappingException, Exception {
+		logger.info("=====JSON的內容:" + json + ";=====");
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(json, responceClass);
+	}
+
+	public static byte[] getSHA256(String input) throws NoSuchAlgorithmException {
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+		return md.digest(input.getBytes(StandardCharsets.UTF_8));
+	}
+
+	public static String toHexString(byte[] hash) {
+		BigInteger number = new BigInteger(1, hash);
+
+		StringBuilder hexString = new StringBuilder(number.toString(16));
+
+		while (hexString.length() < 32) {
+			hexString.insert(0, '0');
+		}
+
+		return hexString.toString();
+	}
+
+	public static String TaipeiPassCheckCode(String str) {
+		if (StringUtils.isNotBlank(str)) {
+			try {
+				//org.apache.commons.codec.digest.DigestUtils.sha256Hex(str).substring(0, 6)
+				return toHexString(getSHA256(str)).substring(0, 6).toUpperCase();
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			return null;
+		} else {
+			return null;
+		}
+
+	}
+
+}

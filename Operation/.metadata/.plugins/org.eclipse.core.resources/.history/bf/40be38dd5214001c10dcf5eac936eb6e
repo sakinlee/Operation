@@ -1,0 +1,32 @@
+package com.example.demo.controller;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.demo.DAO.MemberRepository;
+import com.example.demo.Fegin.FeginClientService;
+
+@Controller
+@RequestMapping("/TestService")
+public class ServiceController {
+
+	@Autowired
+	MemberRepository memberRepository;
+
+	@Autowired
+	DataSource dataSource;
+	
+	@Autowired
+	FeginClientService feginClientService;
+
+	@RequestMapping(value = "/currentprice", method = RequestMethod.GET)
+	@ResponseBody
+	public String currentprice() {
+		return feginClientService.currentprice();
+	}
+}

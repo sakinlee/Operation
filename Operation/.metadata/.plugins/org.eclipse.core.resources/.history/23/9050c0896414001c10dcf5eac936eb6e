@@ -1,0 +1,116 @@
+package com.example.demo.controller;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.demo.DAO.CurrencyRepository;
+import com.example.demo.Entity.CurrencyJPA;
+import com.example.demo.Fegin.FeginClientService;
+import com.example.demo.Utils.DataUtils;
+
+@Controller
+@RequestMapping("/TestService")
+public class ServiceController {
+
+	@Autowired
+	CurrencyRepository CurrencyRepository;
+
+	@Autowired
+	DataSource dataSource;
+	
+	@Autowired
+	FeginClientService feginClientService;
+
+	@RequestMapping(value = "/currentprice", method = RequestMethod.GET)
+	@ResponseBody
+	public String currentprice() {
+		return feginClientService.currentprice();
+	}
+	
+	@RequestMapping(value = "/currentpriceTidy", method = RequestMethod.GET)
+	@ResponseBody
+	public String currentpriceTidy() {
+		String jsonStr =feginClientService.currentprice();
+		
+		if(StringUtils.isNotBlank(jsonStr)) {
+			JSONObject j = new JSONObject(jsonStr);
+			CurrencyJPA CJPA = new CurrencyJPA();
+			
+			String disclaimer = null;
+			String chartName = null;
+			if(j.has("chartName")) {
+				chartName = j.getString("chartName");
+			}
+			
+			if(j.has("disclaimer")) {
+				disclaimer = j.getString("disclaimer");
+			}
+			
+			if(j.has("bpi")) {
+				JSONObject bpi = new JSONObject(j.has("bpi"));
+				Iterator<String> keys = bpi.keys();
+			}
+			
+			
+		
+		}
+		
+		return null;
+	}
+	
+	@RequestMapping(value = "/insertCurrencyTable", method = RequestMethod.GET)
+	@ResponseBody
+	public int insertCurrencyTable() {
+		CurrencyJPA CJPA = new CurrencyJPA();
+		CJPA.setChartName("Bitcoin");
+		CJPA.setCode("USD");
+		CJPA.setSymbol("&#36;");
+		CJPA.setRate("44,626.2263");
+		CJPA.setDescription("United States Dollar");
+		CJPA.setRateFloat("44626.2263");
+		return CurrencyRepository.insertCurrencyTable(CJPA);
+	}
+	
+	@RequestMapping(value = "/updateCurrencyTable", method = RequestMethod.GET)
+	@ResponseBody
+	public int updateCurrencyTable() {
+		CurrencyJPA CJPA = new CurrencyJPA();
+		CJPA.setChartName("Bitcoin1");
+		CJPA.setCode("USD1");
+		CJPA.setSymbol("&#36;");
+		CJPA.setRate("44,626.4444");
+		CJPA.setDescription("United States Dollar1");
+		CJPA.setRateFloat("44626.4444");
+		return CurrencyRepository.updateCurrencyTable(CJPA);
+	}
+	
+	@RequestMapping(value = "/deleteCurrencyTable", method = RequestMethod.GET)
+	@ResponseBody
+	public int deleteCurrencyTable() {
+		return CurrencyRepository.deleteCurrencyTable();
+	}
+	
+	@RequestMapping(value = "/selectCurrencyTable", method = RequestMethod.GET)
+	@ResponseBody
+	public String selectCurrencyTable() {
+		List<CurrencyJPA>  list = CurrencyRepository.selectCurrencyTable();
+		if(list==null) {
+			list = new ArrayList<CurrencyJPA>();
+		}
+		
+		return DataUtils.Object2Json(list);
+	}
+	
+	
+}
